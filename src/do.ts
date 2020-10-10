@@ -1,8 +1,9 @@
-import { none, option, Option, some } from 'fp-ts/lib/Option'
+import { none, option, Option, some, fold } from 'fp-ts/lib/Option'
 import { either, Either, right, left } from 'fp-ts/lib/Either'
 import { Do } from 'fp-ts-contrib/Do'
+
 const maybeA: Option<number> = some(5)
-const maybeB: Option<number> = none
+const maybeB: Option<number> = some(20)
 const maybeC: Option<number> = some(40)
 
 // cb style
@@ -19,7 +20,12 @@ const res = Do(option)
    .bind('c', maybeC)
    .return(ctx => ctx.a + ctx.b + ctx.c)
 
-console.log(res)
+console.log(
+   fold(
+      () => console.log('none'),
+      v => console.log(v)
+   )(res)
+)
 
 const isOver18 = (val: number): Option<boolean> => (val > 18 ? some(true) : none)
 
